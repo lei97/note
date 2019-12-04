@@ -4,6 +4,10 @@
 
 ###  定位
 
+D:\Documents\我的文档\Tencent Files\1022958177\FileRecv
+
+
+
 ####  相对坐标
 
 ####  锚定位
@@ -32,7 +36,6 @@ class Ui (object):
     def run(self) :
         self.view.show()
         self.app.exec_()
-
 
 if __name__ == '__main__':
     ui = Ui("Qml/main.qml")
@@ -105,3 +108,122 @@ QBTN.TextBtn {
 }
 ```
 
+## [Qt Quick 性能优化](https://doc.qt.io/qt-5/qtquick-performance.html) （ 60 fps )
+
+###  调试手段
+
+TODO :  等待开始。
+
+TODO：使用Qt Profiling 进行性能分析。
+
+URL：  http://doc.qt.io/qtcreator/creator-qml-performance-monitor.html   
+
+### 事件驱动
+
+* 避免定时轮询
+* 使用信号槽
+
+###  使用多线程
+
+* C++ 多线程
+* Qml WorkerScript 元件
+
+###  使用 Qt Quick Compiler
+
+在 pro 文件添加 `CONFIG += qtquickcompiler`。
+
+```shell 
+#!/bin/sh
+rm *.rcc
+rcc -binary qml.qrc -o qml.rcc
+```
+
+**补充（ 待确认）**：
+
+* Qt 5.12 会有新的 Qml 代码生成器 ，性能比 QuickCompiler 。
+
+###  避免使用 CPU 渲染的元件
+
+* Canvas
+
+* Qt Charts
+
+###  使用异步加载
+
+补充： Qml 的 Image 元件有 异步加载属性 asynchronous 默认为 false 设置 为 true 就是异步加载
+
+* 图片异步加载
+
+* C++ 处理大数据加载
+
+###  JavaScript Code 关于 JavaScript 优化使用
+
+####  属性绑定
+
+1. QML 优化了引擎，简单的表达式不会启动 JavaScript 。
+
+```JavaScript
+x : 10 + 2 * 5 		//qml 直接计算
+```
+
+2. 避免申明 JavaScript 中间变量
+
+```javascript
+for (var i = 0; i < 100; ++i) 
+{
+	var obj = xxx;		// 中间变量 obj 频繁创建，会有性能问题
+	obj.xxx;
+}
+```
+
+3. 避免在即时求值 范围外访问属性 （绑定表达式所在对象的属性 ，组件中的 id ，组件中的根部元素 id 需要用到属性进行运算时避免直接写操作。
+
+```javascript
+// bad
+for (var i = 0; i < 100; ++1)
+{
+    Item.x += doSomething(i);
+}
+
+// good
+var pos = 0;
+for (var i = 0; i < 100; ++i)
+{
+    pos += doSomething(i);
+}
+Item.x = pos;		// 局部变量存储结果， 执行一次读写操作
+```
+
+#### 属性解析
+
+避免频繁访问属性 ( QML Profiler 看到的调用频率比较高的部分，要尤其注意不要进行属性访问 ）
+
+###  Qt Quick 图片和布局优化
+
+####  降低图片加载时间和内存开销
+
+* 异步加载
+* 设置图片尺寸 （ 待确认 ）
+
+#### 锚定布局
+
+坐标 > 锚定 > 绑定 > JavaScript 函数
+
+### 元素周期设计
+
+使用 Loader 动态加载和卸载组件
+
+* 使用 active 属性，可以延迟实例化。
+* 使用 source 属性，可以提供初始属性值。
+* asynchronous 异步属性设置为 true，在组件实例时可以提高流畅性
+
+###  渲染注意事项
+
+* 避免使用 Clip 属性，剪切损失性能。
+* 被覆盖的元素设置 visible 为 false 。
+* 透明 与 不透明：不透明效率更高，全透明设置不可见。
+* 半透明组件设置为 `visible ：opacity >  0`
+
+### 使用 Animation 不使用 Timer
+
+Qt 优化了动画的实现，性能高于定时器触发属性的改变。Timer 触发动画的方式性能低下、更耗电。
