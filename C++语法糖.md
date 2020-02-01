@@ -1,10 +1,10 @@
-##  C++ 特性整理
+#  C++ 语法糖
 
 [TOC]
 
 链接：https://changkun.gitbooks.io/cpp1x-tutorial/content/
 
-###  nullptr
+##  nullptr
 
 **nullptr** 目的是为了替代 **NULL** 。
 
@@ -24,7 +24,7 @@ foo(nullptr);   //调用函数2
 ```
 - 建议：使用 **nullptr** 替代 **NULL** 。
 
-###  constexpr
+## constexpr
 
 C++ 具备常数表达式的概念，为了提高性能，编译时把表达式直接优化并植入到程序运行中。
 
@@ -67,16 +67,18 @@ constexpr int fibonacci_14(const int n)
 }
 ```
 
-###  auto 
+## auto 
 
 减少变量类型操作 ，利用 `auto`  进行类型推导。
 
 ```c++
 std::vector<int> vec{ 1,2,3,4,5 };
+
 for (std::vector<int>::const_iterator itr = vec.cbegin(); itr != vec.cend(); ++itr)
 {
 	std::cout << *itr << std::endl;
 }
+
 // 等价
 for (auto itr = vec.cbegin(); itr != vec.cend(); ++itr)
 {
@@ -84,7 +86,7 @@ for (auto itr = vec.cbegin(); itr != vec.cend(); ++itr)
 }
 ```
 
-常见用法
+常见用法 ：
 
 ```c++
 auto i = 5;
@@ -106,7 +108,7 @@ auto auto_arr = arr;  //类型为int 数据为 arr[0]
 
 ###  decltype 
 
-`decltype` 关键字为了解决 `auto` 关键字只能对变量进行类型推导的缺陷。 用法类似于 `sizeof` 
+`decltype` 关键字为了解决 `auto` 关键字只能对变量进行类型推导的缺陷。 用法类似于 `sizeof` 。
 
 ```c++
 auto x = 1;
@@ -128,7 +130,6 @@ template<typename T, typename U>
 auto add(T x, U y) -> decltype(x + y) {
 	return x + y;
 }  
-
 
 // 写法 3 C++14
 template<typename T, typename U>
@@ -245,32 +246,32 @@ add(100,100);
 > C++11 引入了 多个模板参数表示方法，允许任意个数，任意类别的模板参数。
 
 ```c++
-	/******************************************************
-	 * 变长参数模板
-	 ******************************************************/
-	template<typename...Ts> 
-	class Magic {};    // 必须添加 {} 否则编译报错
+/******************************************************
+* 变长参数模板
+******************************************************/
+template<typename...Ts> 
+class Magic {};    // 必须添加 {} 否则编译报错
 
-	// 多个模板参数
-	Magic<int,
-		std::vector<int>,
-		std::map<std::string,
-		std::vector<int>>> darkMagic;
+// 多个模板参数
+Magic<int,
+	std::vector<int>,
+	std::map<std::string,
+	std::vector<int>>> darkMagic;
 
-	// 0 个模板参数
-	Magic<> nothing;
+// 0 个模板参数
+Magic<> nothing;
 
-	// 至少 1 个模板参数
-	template<typename Require, typename... Args> class Magic_1;
+// 至少 1 个模板参数
+template<typename Require, typename... Args> class Magic_1;
 
-	//变长参数函数
-	template<typename... Args>
-	void printf(const std::string& str, Args... args);
+//变长参数函数
+template<typename... Args>
+void printf(const std::string& str, Args... args);
 
-	template<typename... Args>
-	void magic(Args... args) {
-		std::cout << sizeof...(args) << std::endl;
-	}
+template<typename... Args>
+void magic(Args... args) {
+    std::cout << sizeof...(args) << std::endl;
+}
 ```
 
 ```c++
@@ -285,15 +286,15 @@ magic(1);     	 // 输出 1
 > 需要定义一个终止递归函数。
 
 ``` c++
-	template<typename T>
-	void printf1(T value) {
-		std::cout << value << std::endl;
-	}
-	template<typename T, typename... Args>
-	void printf1(T value, Args... args) {
-		std::cout << value << std::endl;
-		printf1(args...);
-	}
+template<typename T>
+void printf1(T value) {
+    std::cout << value << std::endl;
+}
+template<typename T, typename... Args>
+void printf1(T value, Args... args) {
+    std::cout << value << std::endl;
+    printf1(args...);
+}
 
 printf1(1, 3, 5.5, 23);
 // 输出结果：1
@@ -307,14 +308,14 @@ printf1(1, 3, 5.5, 23);
 >  C++11 中提供的初始化列表以及 Lambda 表达式的特性（下一节中将提到），而 std::initializer_list 也是 C++11 新引入的容器 
 
 ```c++
-	template<typename T, typename... Args>
-	auto printf2(T value, Args... args) 
-	{
-		std::cout << value << std::endl;
-		return std::initializer_list<T>{([&] {
-			std::cout << args << std::endl;
-			}(), value)...};
-	}
+template<typename T, typename... Args>
+auto printf2(T value, Args... args) 
+{
+    std::cout << value << std::endl;
+    return std::initializer_list<T>{([&] {
+        std::cout << args << std::endl;
+    }(), value)...};
+}
 ```
 
 >  事实上，有时候我们虽然使用了变参模板，却不一定需要对参数做逐个遍历，我们可以利用 `std::bind` 及完美转发等特性实现对函数和参数的绑定，从而达到成功调用的目的。 
@@ -326,20 +327,20 @@ printf1(1, 3, 5.5, 23);
 > 在同一个类中一个构造函数调用另一个构造函数，简化代码。
 
 ```c++ 
-	class Base {
-	public:
-		int m_value1;
-		int m_value2;
-		Base() {
-			m_value1 = 1;
-		}
-		Base(int value) : Base() {  // 委托 Base() 构造函数
-			m_value2 = value;
-		}
-	};
+class Base {
+    public:
+    int m_value1;
+    int m_value2;
+    Base() {
+        m_value1 = 1;
+    }
+    Base(int value) : Base() {  // 委托 Base() 构造函数
+        m_value2 = value;
+    }
+};
 
-	// 使用
-	Base base(2);
+// 使用
+Base base(2);
 ```
 
 ####  继承构造
@@ -347,13 +348,13 @@ printf1(1, 3, 5.5, 23);
 > 在传统 C++ 中，构造函数需要参数一一传递，导致效率低下。C++11 利用关键字 `using` 引进继承构造函数。
 
 ```c++
-	class Subclass : public Base {
-	public:
-		using Base::Base;          // 继承构造 取消这一行造成下面使用编译错误
-	};
+class Subclass : public Base {
+    public:
+    using Base::Base;          // 继承构造 取消这一行造成下面使用编译错误
+};
 
-	// 使用 
-	Subclass s(3);
+// 使用 
+Subclass s(3);
 ```
 
 ####  显式虚函数重载
