@@ -106,7 +106,7 @@ int arr[10] = {};
 auto auto_arr = arr;  //类型为int 数据为 arr[0]
 ```
 
-###  decltype 
+##  decltype 
 
 `decltype` 关键字为了解决 `auto` 关键字只能对变量进行类型推导的缺陷。 用法类似于 `sizeof` 。
 
@@ -138,7 +138,7 @@ auto add(T x, U y) {
 }
  ```
 
-###  基于范围的 `for` 循环
+##  基于范围的 `for` 循环
 
 ```c++
 std::vector<int> vec{ 1,2,3,4,5 };
@@ -155,7 +155,7 @@ for (auto& i : vec)
 }
 ```
 
-###  初始化列表
+##  初始化列表
 
 ```C++
 int arr[3] = {1, 2, 3};
@@ -182,9 +182,9 @@ A a {1, 1.1};
 B b {2, 2.2};
 ```
 
-###  模板增强
+##  模板增强
 
-####  外部模板
+###  外部模板
 
 ```c++
 // TODO 待整理
@@ -192,7 +192,7 @@ template class std::vector<Foo>;         // 强行实例化
 extern template class std::vector<Foo>;  // 不在该编译文件中实例化模板
 ```
 
-####  尖括号
+###  尖括号
 
 嵌套模板代码：
 
@@ -200,7 +200,7 @@ extern template class std::vector<Foo>;  // 不在该编译文件中实例化模
 std::vector<std::vector<int>> num;
 ```
 
-####  类型别名模板
+###  类型别名模板
 
 > 模板是用来产生类型的。	**typedef**  定义与一个新的名称，不能为模板定义为一个新的名称。
 
@@ -219,7 +219,7 @@ using process = int(*)(void*); // 同上, 更加直观
 using NewType1 = SuckType<std::vector<int>, std::string>;
 ```
 
-####  默认模板参数
+###  默认模板参数
 
 ```c++
 // 原函数
@@ -241,7 +241,7 @@ auto add(T x, U y) -> decltype(x+y)
 add(100,100);
 ```
 
-####  变长参数模板
+###  变长参数模板
 
 > C++11 引入了 多个模板参数表示方法，允许任意个数，任意类别的模板参数。
 
@@ -279,7 +279,7 @@ magic();		// 输出 0
 magic(1);     	 // 输出 1
 ```
 
-#####  解包方式
+####  解包方式
 
 * **递归模板参数**
 
@@ -320,9 +320,9 @@ auto printf2(T value, Args... args)
 
 >  事实上，有时候我们虽然使用了变参模板，却不一定需要对参数做逐个遍历，我们可以利用 `std::bind` 及完美转发等特性实现对函数和参数的绑定，从而达到成功调用的目的。 
 
-###  面对对象增强
+##  面对对象增强
 
-####  委托构造
+###  委托构造
 
 > 在同一个类中一个构造函数调用另一个构造函数，简化代码。
 
@@ -343,7 +343,7 @@ class Base {
 Base base(2);
 ```
 
-####  继承构造
+###  继承构造
 
 > 在传统 C++ 中，构造函数需要参数一一传递，导致效率低下。C++11 利用关键字 `using` 引进继承构造函数。
 
@@ -383,14 +383,14 @@ Subclass s(3);
 #####  `override`
 
 ```c++ 
-	struct BaseStruct {
-		virtual void foo(float);
-	};
+struct BaseStruct {
+    virtual void foo(float);
+};
 
-	struct SubStruct : BaseStruct {
-		void foo(float) override;
-         void foo(double) override;  // 不合法
-	};
+struct SubStruct : BaseStruct {
+    void foo(float) override;
+    void foo(double) override;  // 不合法
+};
 ```
 
 #####  `final`
@@ -424,19 +424,19 @@ Subclass s(3);
 ###  强枚举类型
 
 ```c++
-	enum class new_enum : unsigned int {
-		value1,
-		value2,
-		value3 = 100,
-		value4 = 100
-	};
+enum class new_enum : unsigned int {
+    value1,
+    value2,
+    value3 = 100,
+    value4 = 100
+};
 ```
 
 ```c++
-	if (new_enum::value3 == new_enum::value4) {
-		// 会输出
-		std::cout << "new_enum::value3 == new_enum::value4" << std::endl;
-	}
+if (new_enum::value3 == new_enum::value4) {
+    // 会输出
+    std::cout << "new_enum::value3 == new_enum::value4" << std::endl;
+}
 ```
 
 ```c++
@@ -845,7 +845,7 @@ std::cout << new_enum::value3 << std::endl;
 ###  无序容器 ( C++11 )
 
 ```c++
-	// TODO: 有序容器 std::map / std::set 学习
+// TODO: 有序容器 std::map / std::set 学习
 ```
 
  C++11 引入了两组无序容器：`std::unordered_map`/`std::unordered_multimap` 和 `std::unordered_set`/`std::unordered_multiset` 
@@ -991,8 +991,9 @@ for(int i = 0; i != tuple_len(new_tuple); ++i)
     // 运行期索引
     std::cout << tuple_index(i, new_tuple) << std::endl;
 ```
-
-###  RAII 与引用计数
+### 智能指针
+TODO:  待整理
+####  RAII 与引用计数
 
  传统 C++ 里我们只好使用 `new` 和 `delete` 去『记得』对资源进行释放。而 C++11 引入了智能指针的概念，使用了引用计数的想法 。
 
@@ -1488,6 +1489,10 @@ void test_s()
 	}
 }
 ```
+
+##  智能指针
+
+
 
 ##  TODO: c++17 整理
 
