@@ -421,7 +421,7 @@ struct SubStruct : BaseStruct {
 	};
 ```
 
-###  强枚举类型
+##  强枚举类型
 
 ```c++
 enum class new_enum : unsigned int {
@@ -449,7 +449,7 @@ std::ostream& operator<<(typename std::enable_if<std::is_enum<T>::value, std::os
 std::cout << new_enum::value3 << std::endl;
 ```
 
-###  Lambda 表达式
+##  Lambda 表达式
 
 > 类似于匿名函数的特性。不需要命名一个函数的情况下使用。
 
@@ -459,7 +459,7 @@ std::cout << new_enum::value3 << std::endl;
 }
 ```
 
-####  值捕获
+###  值捕获
 
 > 与参数传值类似，值捕获前期变量可以拷贝，不同之处在于，被捕获的变量在 `lambda` 表达式==**被创建时拷贝**==，而非调用时拷贝。
 
@@ -477,7 +477,7 @@ std::cout << new_enum::value3 << std::endl;
 	}
 ```
 
-####  引用捕获
+###  引用捕获
 
 ```c++
 	void learn_lambda_func_2() {
@@ -493,7 +493,7 @@ std::cout << new_enum::value3 << std::endl;
 	}
 ```
 
-#### 隐式捕获
+### 隐式捕获
 
 >  可以在捕获列表中写一个 `&` 或 `=` 向编译器声明采用 引用捕获或者值捕获 
 
@@ -502,7 +502,7 @@ std::cout << new_enum::value3 << std::endl;
 * [&] 引用捕获，让编译器自行推导捕获列表
 * [=] 值捕获，让编译器执行推导应用列表
 
-####  表达式捕获（ C++14 ）
+###  表达式捕获（ C++14 ）
 
 > 捕获方式均为左值，不能捕获右值。
 
@@ -519,7 +519,7 @@ std::cout << new_enum::value3 << std::endl;
 
 > `important` 是一个独占指针，不能捕获，转移为右值，在表达式初始化。
 
-####  泛型 Lambda ( C++14 )
+###  泛型 Lambda ( C++14 )
 
 ```c++ 
 	auto add = [](auto x, auto y) {
@@ -530,9 +530,9 @@ std::cout << new_enum::value3 << std::endl;
 	auto a = add(1.1, 2.2);
 ```
 
-### 函数对象包装器
+## 函数对象包装器
 
-####  `std::function`
+###  `std::function`
 
 > `Lambda` 表达式的本质是一个函数对象，当 `Lambda` 表达式捕获列表为空时，`Lambda` 表达式还能够作为一个函数指针进行传递。
 
@@ -552,7 +552,7 @@ std::cout << new_enum::value3 << std::endl;
 	}
 ```
 
-####  通用、多态的函数封装
+###  通用、多态的函数封装
 
 > C++中现有的可调用实体的一种类型安全的包裹（相对来说，函数指针的调用不是类型安全的），换句话说，就是函数的容器 。
 
@@ -575,7 +575,7 @@ std::cout << new_enum::value3 << std::endl;
 	}
 ```
 
-#### `std::bind/std::placehorder`
+### `std::bind/std::placehorder`
 
 >  `std::bind` 则是用来绑定函数调用的参数，解决不一定获取调用函数取得全部参数。
 
@@ -594,11 +594,11 @@ std::cout << new_enum::value3 << std::endl;
 	}
 ```
 
-###  右值引用
+##  右值引用
 
 > 右值引用是 C++11 引入的与 Lambda 表达式齐名的重要特性之一。
 
-####  左值、右值的纯右值、将亡值、右值
+###  左值、右值的纯右值、将亡值、右值
 
 **左值(lvalue, left value)**，顾名思义就是赋值符号左边的值。准确来说，左值是表达式（不一定是赋值表达式）后依然存在的持久对象。
 
@@ -624,7 +624,7 @@ std::cout << new_enum::value3 << std::endl;
 	}
 ```
 
-####  右值引用和左值引用
+###  右值引用和左值引用
 
 > 需要拿到一个将亡值，需要用到右值引用的申明：`T &&`。`T` 是类型。右值引用让临时生命周期得以延长。 
 >
@@ -669,7 +669,7 @@ std::cout << new_enum::value3 << std::endl;
 	}
 ```
 
-#### 移动语义
+### 移动语义
 
 `TODO:`  这一部分待整理。
 
@@ -728,7 +728,7 @@ std::cout << new_enum::value3 << std::endl;
 	}
 ```
 
-####  完美转发
+###  完美转发
 
 ```c++
 	void reference(int& v) {
@@ -805,9 +805,9 @@ std::cout << new_enum::value3 << std::endl;
 
 >  `std::forward` 和 `std::move` 一样，没有做任何事情，`std::move` 单纯的将左值转化为右值，`std::forward` 也只是单纯的将参数做了一个类型的转换，从是线上来看，`std::forward(v)` 和 `static_cast(v)` 是完全一样的。 
 
-###  `std::array` 和 `std::forward_list`
+##  `std::array` 和 `std::forward_list`
 
-####  `std::array`
+###  `std::array`
 
 * `std::array` 编译时创建一个固定大小的数组。
 * 不能被隐式转化为指针。
@@ -836,13 +836,13 @@ std::cout << new_enum::value3 << std::endl;
 	}
 ```
 
-####   `std::forward_list`
+###   `std::forward_list`
 
 > `std::forward_list` 是一个列表容器，使用方法和 `std::list` 基本类似。
 >
 > 需要知道的是，和 `std::list` 的双向链表的实现不同，`std::forward_list` 使用单向链表进行实现，提供了 `O(1)` 复杂度的元素插入，不支持快速随机访问（这也是链表的特点），也是标准库容器中唯一一个不提供 `size()` 方法的容器。当不需要双向迭代时，具有比 `std::list` 更高的空间利用率。
 
-###  无序容器 ( C++11 )
+##  无序容器 ( C++11 )
 
 ```c++
 // TODO: 有序容器 std::map / std::set 学习
@@ -889,11 +889,11 @@ std::cout << new_enum::value3 << std::endl;
     */
 ```
 
-###  元组 `std::tuple`
+##  元组 `std::tuple`
 
 >  除了 `std::pair` 外，似乎没有现成的结构能够用来存放不同类型的数据（通常我们会自己定义结构）, `std::pair` 只能保存两个元素。
 
-####  基本操作
+###  基本操作
 
 ```c++
 	auto get_student(int id)
@@ -940,7 +940,7 @@ std::cout << new_enum::value3 << std::endl;
 		std::cout << std::get<3>(t) << std::endl;
 ```
 
-####  运行期索引 （待测试）
+###  运行期索引 （待测试）
 
 >  `std::get<>` 依赖一个编译期的常量 。
 
@@ -973,7 +973,7 @@ int i = 1;
 std::cout << tuple_index(i, t) << std::endl;
 ```
 
-####  元组合并与遍历（待测试）
+###  元组合并与遍历（待测试）
 
 合并元组可以通过 `std::tuple_cat` 实现：
 
@@ -991,15 +991,15 @@ for(int i = 0; i != tuple_len(new_tuple); ++i)
     // 运行期索引
     std::cout << tuple_index(i, new_tuple) << std::endl;
 ```
-### 智能指针
+## 智能指针
 TODO:  待整理
-####  RAII 与引用计数
+###  RAII 与引用计数
 
  传统 C++ 里我们只好使用 `new` 和 `delete` 去『记得』对资源进行释放。而 C++11 引入了智能指针的概念，使用了引用计数的想法 。
 
 > 注意：引用计数不是垃圾回收，引用技术能够尽快收回不再被使用的对象，同时在回收的过程中也不会造成长时间的等待，更能够清晰明确的表明资源的生命周期。 
 
-####  `std::shared_ptr`
+###  `std::shared_ptr`
 
 ```c++
 	void foo_shared(std::shared_ptr<int> i)
@@ -1044,7 +1044,7 @@ TODO:  待整理
 	}
 ```
 
-####  `std::unique_ptr`
+###  `std::unique_ptr`
 
 是一种独占智能指针，禁止其他智能指针共享一个对象。
 
@@ -1092,7 +1092,7 @@ TODO:  待整理
 	}
 ```
 
-####  `std::weak_ptr`
+###  `std::weak_ptr`
 
 ```c++
 // 内存泄漏
@@ -1133,9 +1133,9 @@ TODO:  待整理
 
  `std::weak_ptr` 没有 `*` 运算符和 `->` 运算符，所以不能够对资源进行操作，它的唯一作用就是用于检查 `std::shared_ptr` 是否存在，`expired()` 方法在资源未被释放时，会返回 `true`，否则返回 `false`。 
 
-###  正则表达式
+##  正则表达式
 
-####  简介
+###  简介
 
 描述了一种字符串匹配模式。
 
@@ -1145,7 +1145,7 @@ TODO:  待整理
 
 学习链接： https://github.com/ziishaned/learn-regex/blob/master/translations/README-cn.md 
 
-####  `std::regex` 及其相关
+###  `std::regex` 及其相关
 
 ```C++
 	void test_regex()
@@ -1172,10 +1172,11 @@ TODO:  待整理
 	}
 ```
 
-###  线程支持
+##  线程支持
+### 简介
+TODO:  这部分放在多线程学习中。
 
-####  `std::thread`
-
+###  `std::thread`
 ```c++
 		void foo()
 		{
@@ -1189,7 +1190,7 @@ TODO:  待整理
 		}
 ```
 
-#### `std::mutex` 和 `std::qnique_lock`
+### `std::mutex` 和 `std::qnique_lock`
 
 `std::mutex` 是 C++11 中最基本的 `mutex` 类，通过实例化 `std::mutex` 可以创建互斥量，而通过其成员函数 `lock()` 可以仅此能上锁，`unlock()` 可以进行解锁 。
 
@@ -1225,7 +1226,7 @@ TODO:  待整理
 		}
 ```
 
-####   `std::future` 和 `std::packaged_task`
+###   `std::future` 和 `std::packaged_task`
 
 ```c++
         void test_future()
@@ -1243,7 +1244,7 @@ TODO:  待整理
         }
 ```
 
-#### `std::condition_variable`
+### `std::condition_variable`
 
 ```C++
 void test_condition_variable()
@@ -1302,11 +1303,11 @@ void test_condition_variable()
 }
 ```
 
-###  `long long int`
+##  `long long int`
 
 > C++ 11 纳入标准库，64 位。
 
-###  `noexcept`修饰符
+##  `noexcept`修饰符
 
 > 异常处理机制
 
@@ -1373,7 +1374,7 @@ void test_noexcept()
 }
 ```
 
-###  原始字符串字面量
+##  原始字符串字面量
 
 ```c++
 void test_font()
@@ -1383,7 +1384,7 @@ void test_font()
 }
 ```
 
-###  自定义字面量
+##  自定义字面量
 
 ```c++
 //字符串字面量自定义必须设置如下的参数列表
@@ -1409,9 +1410,9 @@ void test_font1()
 * 字符串字面量：必须使用 `(const char *, size_t)` 形式的参数表
 * 字符字面量：参数只能是 `char`, `wchar_t`, `char16_t`, `char32_t` 这几种类型。
 
-###  非类型模板参数的 `auto `（ c++17）
+##  非类型模板参数的 `auto `（ c++17）
 
-####  类型参数模板
+###  类型参数模板
 
 ```c++
 template <typename T, typename U>
@@ -1444,7 +1445,7 @@ void test_auto() {
 };
 ```
 
-###  `std::variant<>` ( c++17 )
+##  `std::variant<>` ( c++17 )
 
 ```c++
         template <size_t n, typename... Args>
@@ -1462,7 +1463,7 @@ void test_auto() {
         }
 ```
 
-###  结构化绑定 ( c++17 )
+##  结构化绑定 ( c++17 )
 
 ```c++
 std::tuple<int, double, std::string> f() {
@@ -1474,7 +1475,7 @@ void test_struct() {
 }
 ```
 
-### 变量声明的强化
+## 变量声明的强化
 
 在 `if` 或者 `switch` 语句声明一个临时变量。
 
@@ -1490,11 +1491,6 @@ void test_s()
 }
 ```
 
-##  智能指针
-
-
-
 ##  TODO: c++17 整理
 
 学习链接：https://chenxiaowei.gitbook.io/c-17-stl-cook-book/
-
